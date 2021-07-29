@@ -5,9 +5,9 @@ import sqlite3 as sql
 def createdb():
 
 	conn = sqlite3.connect('database.db')
-	print("Opened database successfully")
-	conn.execute('CREATE TABLE IF NOT EXISTS clients (Phonenumber Number, Name TEXT, location TEXT, severity TEXT, contact_list NUMBER)')
-	print("Table Created successfully");
+	# print("Opened database successfully")
+	conn.execute('CREATE TABLE IF NOT EXISTS clients (id TEXT , latitude REAL, longitude REAL, severity NUMBER, relative NUMBER, msg BOOL)')
+	# print("Table Created successfully");
 
 app = Flask(__name__)
 
@@ -18,16 +18,18 @@ def abc():
 
 @app.route('/addrec', methods =['POST'])	
 def addentryindb():
-	phone_number = request.args.get('Phonenumber',default= 1221, type = int)
-	name = request.args.get('Name', type = str)
-	location = request.args.get('location', default=0.0,type=float)
-	severity = request.args.get('severity', default = 1, type =int)
-	contact = request.args.get('contact', default = 1331,type = int)
+	createdb();
+	idx = request.form.get('id',default = "abcd@connectaide",type = str)
+	longitude = request.form.get('latitude',default= 0.0, type = float)
+	latitude = request.form.get('longitude', default=0.0,type=float)
+	severity = request.form.get('severity', default = 0, type = int)
+	relative = request.form.get('relative', default = 1234567890,type = int)
+	msg = request.form.get('msg', defaul t= False, type = bool)
 	try:
 
 		with sql.connect('database.db') as con:
 			cur= con.cursor()
-			cur.execute('INSERT INTO clients (phonenumber,Name,location,severity,contact_list) VALUES (?,?,?,?,?)',(phone_number,name,location,severity,contact))
+			cur.execute('INSERT INTO clients (id,latitude,longitude,severity,relative,msg) VALUES (?,?,?,?,?,?)',(idx,latitude,longitude,severity,relative,msg))
 			con.commit()
 			msg = 'Record Added successfully'
 			print(msg)
@@ -42,4 +44,4 @@ def addentryindb():
 
 
 if __name__ == '__main__':
-	app.run(debug=True)
+	app.run(host='0.0.0.0',debug=True)
