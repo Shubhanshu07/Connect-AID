@@ -2,9 +2,77 @@
 <html>
 <head>
 	<meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+     <meta http-Equiv="Cache-Control" Content="no-cache" />
+    <meta http-Equiv="Pragma" Content="no-cache" />
+    <meta http-Equiv="Expires" Content="0" />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+
+ 
+
+
+
 	<title>ConnectAid</title>
+	<style>
+              
+              body {background: #E5E5E5; }
+              ul {
+  list-style-type: none;
+  overflow: hidden;
+  text-align: center;
+}
+img {
+	border-top-left-radius: 10px;
+border-top-right-radius: 10px;
+border-bottom-left-radius: 10px;
+border-bottom-right-radius: 10px;
+position: relative;
+vertical-align: center;
+width : 100%;
+
+}
+
+#map{
+	height: 80vh;
+	width: 100%;
+	border-top-left-radius: 10px;
+	border-top-right-radius: 10px;
+	border-bottom-left-radius: 10px;
+	border-bottom-right-radius: 10px;
+	padding: 5px;
+	margin: 5px;
+}
+</style>
 </head>
 <body>
-Hello World
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand center" href="#">Connectaide</a>
+    </div>
+    <ul class="nav navbar-nav navbar-right">
+      <li cs="active"las><a href="#">Home</a></li>
+      <li><a href="#">Page 1</a></li>
+      <li><a href="#">Page 2</a></li>
+      <li><a href="#">Page 3</a></li>
+    </ul>
+  </div>
+</nav>
+<div>
+	<div class="container-fluid" id="aa"style="margin:2%;">
+		<div class="row">
+			<div class="col-md-6" style="background-color: darkgray;">
+				<div id = "map"><iframe src="https://maps.google.com/maps?q=27.8,78.06619&z=14&output=embed" width="100%" height="100%"></iframe></div>
+			</div>
+			<div class="col-md-6">
+				<input type="text" name="Enter query">
+				ABCD
+			</div>
+		</div>
+	</div>
+</div>
 </body>
 </html>
