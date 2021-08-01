@@ -9,22 +9,29 @@ def createdb():
 	conn.execute('CREATE TABLE IF NOT EXISTS clients (id TEXT , latitude REAL, longitude REAL, severity NUMBER, relative NUMBER, msg BOOL)')
 	# print("Table Created successfully");
 
+def fetchdata():
+	with sql.connect('database.db') as con:
+		cur = con.cursor()
+		cur.execute("SELECT * FROM clients")
+		data = cur.fetchall()
+		return data 
+
 app = Flask(__name__)
 
 @app.route('/')
 def abc():
-	createdb();	
-	return render_template('index.html'	)
+	createdb();
+	data = fetchdata();
+	return render_template('index.html',data=data)
 
 @app.route('/addrec', methods =['POST'])	
 def addentryindb():
 	createdb();
 	idx = request.form.get('id',default = "abcd@connectaide",type = str)
 	longitude = request.form.get('latitude',default= 0.0, type = float)
-	latitude = request.form.get('longitude', default=0.0,type=float)
 	severity = request.form.get('severity', default = 0, type = int)
 	relative = request.form.get('relative', default = 1234567890,type = int)
-	msg = request.form.get('msg', defaul t= False, type = bool)
+	msg = request.form.get('msg', default= False, type = bool)
 	try:
 
 		with sql.connect('database.db') as con:

@@ -9,14 +9,38 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-
-
+  <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+	</script>
+	<script type="text/javascript">
+		var proj={};
+ $(document).ready(function () {
+ 						proj.lat="";
+ 						proj.long="";
+ 						proj.src="";
+            var table = $('#example').DataTable();
+            $("#example tr").click(function(){
+       $(this).addClass('selected').siblings().removeClass('selected');    
+       proj.lat=$(this).find('td:eq(1)').html();
+       proj.long=$(this).find('td:eq(2)').html();
+       proj.src ="https://maps.google.com/maps?q="+proj.lat+","+proj.long+"&z=14&output=embed";
+     		 $("#display").attr('src',proj.src);	
+    });
+        
+        });
+ console.log(proj);
  
 
+</script>
 
 
 	<title>ConnectAid</title>
 	<style>
+	td {border: 1px #DDD solid; padding: 5px; cursor: pointer;}
+
+.selected {
+    background-color: brown;
+    color: #FFF;
+}
               
               body {background: #E5E5E5; }
               ul {
@@ -65,11 +89,34 @@ width : 100%;
 	<div class="container-fluid" id="aa"style="margin:2%;">
 		<div class="row">
 			<div class="col-md-6" style="background-color: darkgray;">
-				<div id = "map"><iframe src="https://maps.google.com/maps?q=27.8,78.06619&z=14&output=embed" width="100%" height="100%"></iframe></div>
-			</div>
+				<div id = "map">
+					<iframe src="" width="100%" height="100%" id="display"></iframe></div>
+				</div>
 			<div class="col-md-6">
-				<input type="text" name="Enter query">
-				ABCD
+				<table class="table" id="example">
+					<thead class="thead-dark">
+		    		<tr>
+		      		<th scope="col">Id</th>
+		      		<th scope="col">Latitude</th>
+		      		<th scope="col">Longitude</th>
+		      		<th scope="col">Severity</th>
+		      		<th scope="col">Relative</th>
+		      		<th scope="col">Message</th>
+		    		</tr>
+		  		</thead>
+	  			<tbody>
+				    {% for item in data %}
+				    <tr>
+				    	<td>{{item[0]}}</td>
+				    	<td>{{item[1]}}</td>
+				    	<td>{{item[2]}}</td>
+				    	<td>{{item[3]}}</td>
+				    	<td>{{item[4]}}</td>
+				    	<td>{{item[5]}}</td>
+				    </tr>
+				    {% endfor %}
+	    		</tbody>
+				</table>
 			</div>
 		</div>
 	</div>
