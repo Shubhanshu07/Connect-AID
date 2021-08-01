@@ -2,62 +2,90 @@
 <html>
 <head>
 	<meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-     <meta http-Equiv="Cache-Control" Content="no-cache" />
-    <meta http-Equiv="Pragma" Content="no-cache" />
-    <meta http-Equiv="Expires" Content="0" />
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-  <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-	</script>
-	<script type="text/javascript">
-		var proj={};
- $(document).ready(function () {
- 						proj.lat="";
- 						proj.long="";
- 						proj.src="";
-            var table = $('#example').DataTable();
-            $("#example tr").click(function(){
-       $(this).addClass('selected').siblings().removeClass('selected');    
-       proj.lat=$(this).find('td:eq(1)').html();
-       proj.long=$(this).find('td:eq(2)').html();
-       proj.src ="https://maps.google.com/maps?q="+proj.lat+","+proj.long+"&z=14&output=embed";
-     		 $("#display").attr('src',proj.src);	
-    });
-        
-        });
- console.log(proj);
- 
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-Equiv="Cache-Control" Content="no-cache" />
+	<meta http-Equiv="Pragma" Content="no-cache" />
+	<meta http-Equiv="Expires" Content="0" />
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"/>
+	<link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" />
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+	<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+</script>
+<script type="text/javascript">
+	$(document).ready(function () {
+		var lat="";
+		var long="";
+		var src="";
+		$('#example tfoot th').each( function () {
+			var title = $(this).text();
+			$(this).html( '<input type="text" placeholder="Search '+title+'" />' );
+		});
+
+		var table = $('#example').DataTable({
+    //     	initComplete: function () {
+    //     // Apply the search
+    //     this.api().columns().every( function () {
+    //         var that = this;
+
+    //         $( 'input', this.footer() ).on( 'keyup change clear', function () {
+    //             if ( that.search() !== this.value ) {
+    //                 that
+    //                     .search( this.value )
+    //                     .draw();
+    //             }
+    //         } );
+    //     } );
+    // }
+  });
+		var table2 = $('#example2').DataTable();
+		$("#example tbody tr").click(function(){
+			$(this).addClass('selected').siblings().removeClass('selected');    
+			lat=$(this).find('td:eq(1)').html();
+			long=$(this).find('td:eq(2)').html();
+			$.getJSON('https://discover.search.hereapi.com/v1/discover?at='+lat+','+long+'&q=hospital&apikey=QsF8i6nncqki5R9f_Uiulz240_aKO018zCRfLfJ3yGM&limit=3', null, function(data, textStatus, jqXHR){
+				$("#example2 tbody").empty()
+				$.each(data.items, function(idx, obj) {
+					var number="";
+					if(obj.hasOwnProperty('contacts')){
+						number=obj.contacts[0].phone[0].value;
+					}
+					else{
+						number="No contact details found";
+					}
+					$("#example2 tbody").append(
+						"<tr><td>"+
+						obj.title+
+						"</td> <td> "
+						+obj.distance+ 
+						" meter </td><td>"
+						+ number+
+						"</td><td>"
+						+obj.address.label+
+						"</td><tr>"
+						);
+
+				});
+				
+			});
+
+			src ="https://maps.google.com/maps?q="+lat+","+long+"&z=14&output=embed";
+			$("#display").attr('src',src);	
+		});
+		
+	});
+	
 
 </script>
 
 
-	<title>ConnectAid</title>
-	<style>
-	td {border: 1px #DDD solid; padding: 5px; cursor: pointer;}
+<title>ConnectAid</title>
+<style>
+td {border: 1px #DDD solid; padding: 5px; cursor: pointer;}
 
-.selected {
-    background-color: brown;
-    color: #FFF;
-}
-              
-              body {background: #E5E5E5; }
-              ul {
-  list-style-type: none;
-  overflow: hidden;
-  text-align: center;
-}
-img {
-	border-top-left-radius: 10px;
-border-top-right-radius: 10px;
-border-bottom-left-radius: 10px;
-border-bottom-right-radius: 10px;
-position: relative;
-vertical-align: center;
-width : 100%;
 
-}
+body {background: #E5E5E5; }
+
 
 #map{
 	height: 80vh;
@@ -72,54 +100,78 @@ width : 100%;
 </style>
 </head>
 <body>
-<nav class="navbar navbar-default">
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <a class="navbar-brand center" href="#">Connectaide</a>
-    </div>
-    <ul class="nav navbar-nav navbar-right">
-      <li cs="active"las><a href="#">Home</a></li>
-      <li><a href="#">Page 1</a></li>
-      <li><a href="#">Page 2</a></li>
-      <li><a href="#">Page 3</a></li>
-    </ul>
-  </div>
-</nav>
-<div>
-	<div class="container-fluid" id="aa"style="margin:2%;">
-		<div class="row">
-			<div class="col-md-6" style="background-color: darkgray;">
-				<div id = "map">
-					<iframe src="" width="100%" height="100%" id="display"></iframe></div>
-				</div>
-			<div class="col-md-6">
-				<table class="table" id="example">
-					<thead class="thead-dark">
-		    		<tr>
-		      		<th scope="col">Id</th>
-		      		<th scope="col">Latitude</th>
-		      		<th scope="col">Longitude</th>
-		      		<th scope="col">Severity</th>
-		      		<th scope="col">Relative</th>
-		      		<th scope="col">Message</th>
-		    		</tr>
-		  		</thead>
-	  			<tbody>
-				    {% for item in data %}
-				    <tr>
-				    	<td>{{item[0]}}</td>
-				    	<td>{{item[1]}}</td>
-				    	<td>{{item[2]}}</td>
-				    	<td>{{item[3]}}</td>
-				    	<td>{{item[4]}}</td>
-				    	<td>{{item[5]}}</td>
-				    </tr>
-				    {% endfor %}
-	    		</tbody>
-				</table>
+	<nav class="navbar navbar-default">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<a class="navbar-brand center" href="#">Connectaide</a>
 			</div>
+			<ul class="nav navbar-nav navbar-right">
+				<li class="active"><a href="#">Home</a></li>
+				<li><a href="#">About</a></li>
+				<li><a href="#">Demo</a></li>
+				<li><a href="#"></a></li>
+			</ul>
 		</div>
-	</div>
+	</nav>
+	<div>
+		<div class="container-fluid" id="aa"style="margin:2%;">
+			<div class="row">
+				<div class="col-md-4" style="background-color: darkgray;">
+					<div id = "map">
+						<iframe src="" width="100%" height="100%" id="display"></iframe></div>
+					</div>
+					<div class="col-md-8">
+						<table class="table" id="example" style="width:100;">
+							<thead class="thead-dark">
+								<tr>
+									<th >Id</th>
+									<th>Latitude</th>
+									<th>Longitude</th>
+									<th >Severity</th>
+									<th >Relative</th>
+									<th >Message</th>
+								</tr>
+							</thead>
+							<tbody>
+								{% for item in data %}
+								<tr>
+									<td>{{item[0]}}</td>
+									<td>{{item[1]}}</td>
+									<td>{{item[2]}}</td>
+									<td>{{item[3]}}</td>
+									<td>{{item[4]}}</td>
+									<td>{{item[5]}}</td>
+								</tr>
+								{% endfor %}
+							</tbody>
+	    		<!-- <tfoot>
+	    			<tr>
+              <th>Id</th>
+              <th>Latitude</th>
+              <th>Longitude</th>
+              <th>Severity</th>
+              <th>Relative</th>
+              <th>Message</th>
+            </tr>
+          </tfoot>  --> 
+        </table>
+        <h2><center>Nearby Hospital Data</center></h2>
+        <table class="display" id="example2" style="width:100%;">
+        	<thead class="thead-dark">
+        		<tr>
+        			<th>Name</th>
+        			<th>Distance</th>
+        			<th>Contact</th>
+        			<th>Address</th>
+        		</tr>
+        	</thead>
+        	<tbody>
+        	</tbody>	
+        </table>
+
+      </div>
+    </div>
+  </div>
 </div>
 </body>
 </html>

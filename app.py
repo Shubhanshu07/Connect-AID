@@ -28,7 +28,8 @@ def abc():
 def addentryindb():
 	createdb();
 	idx = request.form.get('id',default = "abcd@connectaide",type = str)
-	longitude = request.form.get('latitude',default= 0.0, type = float)
+	latitude = request.form.get('latitude',default= 0.0, type = float)
+	longitude = request.form.get('longitude',default= 0.0, type = float)
 	severity = request.form.get('severity', default = 0, type = int)
 	relative = request.form.get('relative', default = 1234567890,type = int)
 	msg = request.form.get('msg', default= False, type = bool)
